@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">SmartDayPlanner</string>
+    <string-array name="priority_levels">
+        <item>Düşük</item>
+        <item>Orta</item>
+        <item>Yüksek</item>
+    </string-array>
+    <string-array name="task_periods">
+        <item>Sabah</item>
+        <item>Öğle</item>
+        <item>Akşam</item>
+    </string-array>
+</resources>

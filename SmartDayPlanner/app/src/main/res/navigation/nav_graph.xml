@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.smartdayplanner.ui.home.HomeFragment"
+        android:label="Ana Sayfa"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_addTask"
+            app:destination="@id/navigation_add_task" />
+        <action
+            android:id="@+id/action_home_to_taskDetail"
+            app:destination="@id/navigation_task_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_add_task"
+        android:name="com.example.smartdayplanner.ui.addtask.AddTaskFragment"
+        android:label="Yeni Görev"
+        tools:layout="@layout/fragment_add_task" />
+
+    <fragment
+        android:id="@+id/navigation_task_detail"
+        android:name="com.example.smartdayplanner.ui.taskdetail.TaskDetailFragment"
+        android:label="Görev Detayı"
+        tools:layout="@layout/fragment_task_detail" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.example.smartdayplanner.ui.settings.SettingsFragment"
+        android:label="Ayarlar"
+        tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_ai_planner"
+        android:name="com.example.smartdayplanner.ui.ai.AiPlannerFragment"
+        android:label="AI Planlayıcı"
+        tools:layout="@layout/fragment_ai_planner" />
+</navigation>
