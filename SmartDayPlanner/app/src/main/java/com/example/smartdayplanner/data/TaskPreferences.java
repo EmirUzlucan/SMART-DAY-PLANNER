@@ -23,11 +23,17 @@ public class TaskPreferences {
         this.gson = new Gson();
     }
 
+    /**
+     * Tüm görevleri SharedPreferences'a JSON olarak kaydeder.
+     */
     public void saveTasks(List<Task> tasks) {
         String json = gson.toJson(tasks);
         sharedPreferences.edit().putString(KEY_TASKS, json).apply();
     }
 
+    /**
+     * Kayıtlı tüm görevleri liste olarak döner.
+     */
     public List<Task> getTasks() {
         String json = sharedPreferences.getString(KEY_TASKS, null);
         if (json == null) {
@@ -49,11 +55,14 @@ public class TaskPreferences {
         saveTasks(tasks);
     }
 
+    /**
+     * AI'dan gelen yeni planı uygular. Belirtilen tarihlerdeki eski görevleri silip
+     * yerine gelen yeni listeyi yazar (Duplicate engelleme stratejisi).
+     */
     public void replaceTasksForDates(Map<String, List<Task>> tasksByDate) {
         List<Task> allTasks = getTasks();
-        // Belirtilen tarihlerdeki eski görevleri sil
+        // Duplicate engellemek için AI'dan gelen tarihlerdeki eski görevleri temizleyip yenilerini basıyoruz
         allTasks.removeIf(task -> tasksByDate.containsKey(task.getDate()));
-        // Yeni listeleri ekle
         for (List<Task> dayTasks : tasksByDate.values()) {
             allTasks.addAll(dayTasks);
         }

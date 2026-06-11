@@ -38,11 +38,16 @@ public class AiService {
         this.gson = new Gson();
     }
 
+    /**
+     * Kullanıcının isteğine göre AI'dan yeni bir plan üretir. 
+     * Token tasarrufu için mevcut görevleri sıkıştırarak gönderir.
+     */
     public void generatePlan(String userPrompt, List<Task> currentTasks, AiCallback callback) {
+        // AI'nın bugüne göre plan yapabilmesi için tarih bilgisi alıyoruz
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String today = sdf.format(Calendar.getInstance().getTime());
 
-        // Mevcut görevleri sıkıştırılmış formatta hazırla (Sadece çakışma ve tekrar kontrolü için)
+        // Token tasarrufu: AI'ya tüm detayları değil, sadece çakışma kontrolü için gerekenleri yolluyoruz
         List<String> compressedTasks = new ArrayList<>();
         for (Task t : currentTasks) {
             compressedTasks.add(String.format("%s|%s|%s", t.getName(), t.getDate(), t.getPeriod()));
@@ -90,8 +95,10 @@ public class AiService {
                 try {
                     ChatResponse chatResponse = gson.fromJson(responseBody, ChatResponse.class);
                     String content = chatResponse.choices.get(0).message.content;
+                    // Markdown tag'lerini temizle (AI bazen ```json içine alabiliyor)
                     content = content.replace("```json", "").replace("```", "").trim();
                     
+                    // Map yapısı: Key = Tarih, Value = O günün tüm görevleri (Replacement mantığı)
                     Map<String, List<Task>> rawResult = gson.fromJson(content, new TypeToken<Map<String, List<Task>>>(){}.getType());
                     Map<String, List<Task>> normalizedResult = new HashMap<>();
 
@@ -111,6 +118,9 @@ public class AiService {
         });
     }
 
+    /**
+     * AI'dan gelen tarih ve vakit isimlendirme hatalarını uygulamanın beklediği formata sokar.
+     */
     private Task normalizeTask(Task task, String entryDate) {
         String period = task.getPeriod();
         if (period == null) period = "Sabah";

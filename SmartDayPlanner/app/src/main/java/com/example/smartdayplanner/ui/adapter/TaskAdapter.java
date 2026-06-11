@@ -50,18 +50,24 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         return tasks.size();
     }
 
+    /**
+     * Seçim modunu açar veya kapatır. Kapatıldığında seçili öğeleri temizler.
+     */
     public void setSelectionMode(boolean selectionMode) {
         this.isSelectionMode = selectionMode;
         if (!selectionMode) {
             selectedTasks.clear();
         }
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // Mod değişince tüm listeyi görsel olarak tazeliyoruz
     }
 
     public Set<Task> getSelectedTasks() {
         return selectedTasks;
     }
 
+    /**
+     * Listedeki tüm görevleri seçili hale getirir.
+     */
     public void selectAll() {
         selectedTasks.clear();
         selectedTasks.addAll(tasks);
@@ -69,6 +75,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         listener.onSelectionChanged(selectedTasks.size());
     }
 
+    /**
+     * Tek bir görevin seçim durumunu değiştirir (seç/seçimi kaldır).
+     */
     public void toggleSelection(Task task) {
         int index = tasks.indexOf(task);
         if (index != -1) {
@@ -98,14 +107,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             
             itemView.setBackgroundColor(isSelected ? Color.LTGRAY : Color.TRANSPARENT);
 
-            // Handle CheckBox click
+            // Seçim modu aktifken CheckBox tıklandığında durumu değiştirmek yerine görevi seç/kaldır yapıyoruz
             binding.checkboxCompleted.setOnClickListener(v -> {
                 if (isSelectionMode) {
-                    binding.checkboxCompleted.setChecked(!binding.checkboxCompleted.isChecked()); // Revert visual change
+                    binding.checkboxCompleted.setChecked(!binding.checkboxCompleted.isChecked()); 
                     toggleSelection(task);
                 } else {
                     task.setCompleted(binding.checkboxCompleted.isChecked());
-                    // Normally you'd update preferences here too
                 }
             });
 
